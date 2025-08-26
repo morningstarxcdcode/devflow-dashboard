@@ -1,0 +1,76 @@
+{
+  "name": "devflow-dashboard",
+  "version": "1.0.0",
+  "description": "🚀 AI-Powered Open Source Impact Dashboard - Discover, contribute, and track your impact in the open source ecosystem",
+  "main": "index.html",
+  "homepage": "https://morningstarxcdcode.github.io/devflow-dashboard",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morningstarxcdcode/devflow-dashboard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/morningstarxcdcode/devflow-dashboard/issues"
+  },
+  "scripts": {
+    "dev": "live-server --port=3000 --open",
+    "start": "live-server --port=8080",
+    "build": "npm run minify && npm run optimize",
+    "deploy": "gh-pages -d .",
+    "minify": "html-minifier --collapse-whitespace --remove-comments --minify-css --minify-js index.html -o index.min.html",
+    "optimize": "imagemin assets/images/* --out-dir=assets/images/optimized",
+    "lint": "eslint assets/js/*.js",
+    "format": "prettier --write assets/**/*.{js,css,html}",
+    "test": "echo \"No tests specified\" && exit 0",
+    "lighthouse": "lighthouse http://localhost:3000 --output json --output html --output-path ./lighthouse-results/report",
+    "validate": "html-validate index.html"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.0",
+    "d3": "^7.8.5",
+    "@tensorflow/tfjs": "^4.12.0"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "html-minifier": "^4.0.0",
+    "imagemin": "^8.0.1",
+    "imagemin-pngquant": "^9.0.2",
+    "imagemin-mozjpeg": "^10.0.0",
+    "gh-pages": "^6.0.0",
+    "eslint": "^8.50.0",
+    "prettier": "^3.0.3",
+    "html-validate": "^8.5.0",
+    "lighthouse": "^11.1.0"
+  },
+  "keywords": [
+    "github",
+    "open-source",
+    "ai",
+    "dashboard",
+    "developer-tools",
+    "contributions",
+    "visualization",
+    "machine-learning",
+    "web-app",
+    "pwa",
+    "hackathon",
+    "developer-experience",
+    "impact-tracking",
+    "recommendation-engine",
+    "data-visualization"
+  ],
+  "author": {
+    "name": "DevFlow Team",
+    "email": "contact@devflow.dev",
+    "url": "https://github.com/morningstarxcdcode"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

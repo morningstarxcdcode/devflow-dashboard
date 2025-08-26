@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered platform for discovering and tracking open source contributions on GitHub">
+    <meta name="keywords" content="github, open source, ai, dashboard, developer tools, contribution tracker">
+    <meta name="author" content="DevFlow Team">
+    <meta name="theme-color" content="#7D8471">
+
+    <title>DevFlow - AI-Powered Open Source Impact Dashboard</title>
+
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="./assets/css/main.css">
+    <link rel="icon" type="image/svg+xml" href="./assets/images/favicon.svg">
+
+    <!-- Preload external libraries -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js" as="script">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header glassmorphism">
+        <nav class="nav-container">
+            <div class="logo-section">
+                <svg class="logo-icon" viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <h1 class="logo-text">DevFlow</h1>
+            </div>
+            <div class="nav-controls">
+                <button id="theme-toggle" class="control-btn" aria-label="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button id="github-auth" class="cta-button">
+                    <span class="button-text">Connect GitHub</span>
+                    <span class="button-glow"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h2 class="hero-title">
+                        Amplify Your
+                        <span class="gradient-text">Open Source Impact</span>
+                    </h2>
+                    <p class="hero-description">
+                        AI-powered insights to discover meaningful contributions, 
+                        track your developer journey, and connect with thriving open source communities.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="primary-cta" id="start-journey">Start Your Journey</button>
+                        <button class="secondary-cta" id="view-demo">View Demo</button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="repo-count">2847</span>
+                            <span class="stat-label">Active Repositories</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="issue-count">12456</span>
+                            <span class="stat-label">Good First Issues</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="dev-count">8923</span>
+                            <span class="stat-label">Active Developers</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Grid -->
+        <section class="dashboard-grid">
+            <!-- Smart Contribution Finder -->
+            <article class="dashboard-card contribution-finder">
+                <header class="card-header">
+                    <h3 class="card-title">Smart Contribution Finder</h3>
+                    <div class="card-status">
+                        <span class="status-indicator active"></span>
+                        <span class="status-text">AI Active</span>
+                    </div>
+                </header>
+                <div class="card-content">
+                    <div class="finder-controls">
+                        <select id="skill-level" class="modern-select">
+                            <option value="beginner">Beginner Friendly</option>
+                            <option value="intermediate" selected>Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                        <select id="tech-stack" class="modern-select">
+                            <option value="javascript" selected>JavaScript</option>
+                            <option value="python">Python</option>
+                            <option value="go">Go</option>
+                            <option value="rust">Rust</option>
+                            <option value="typescript">TypeScript</option>
+                        </select>
+                        <button class="search-btn" id="find-issues">Find Issues</button>
+                    </div>
+                    <div id="recommendations-list" class="recommendations-container">
+                        <!-- Dynamic recommendations will load here -->
+                    </div>
+                </div>
+            </article>
+
+            <!-- Impact Tracker -->
+            <article class="dashboard-card impact-tracker">
+                <header class="card-header">
+                    <h3 class="card-title">Open Source Impact</h3>
+                    <div class="impact-score">
+                        <span class="score-value" id="impact-score">85</span>
+                        <span class="score-label">Impact Score</span>
+                    </div>
+                </header>
+                <div class="card-content">
+                    <div id="impact-chart-container" class="chart-container">
+                        <canvas id="impact-chart" class="chart-canvas"></canvas>
+                    </div>
+                    <div class="impact-metrics">
+                        <div class="metric">
+                            <span class="metric-value" id="total-commits">234</span>
+                            <span class="metric-label">Total Commits</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="merged-prs">42</span>
+                            <span class="metric-label">Merged PRs</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="projects-impacted">18</span>
+                            <span class="metric-label">Projects Impacted</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Repository Ecosystem -->
+            <article class="dashboard-card ecosystem-analyzer">
+                <header class="card-header">
+                    <h3 class="card-title">Repository Ecosystem</h3>
+                    <div class="view-controls">
+                        <button class="view-btn active" data-view="network">Network</button>
+                        <button class="view-btn" data-view="dependencies">Dependencies</button>
+                        <button class="view-btn" data-view="trends">Trends</button>
+                    </div>
+                </header>
+                <div class="card-content">
+                    <div id="ecosystem-visualization" class="ecosystem-container">
+                        <div class="ecosystem-preview">
+                            <div class="tech-bubble javascript">JavaScript</div>
+                            <div class="tech-bubble react">React</div>
+                            <div class="tech-bubble node">Node.js</div>
+                            <div class="tech-bubble vue">Vue</div>
+                            <div class="tech-bubble angular">Angular</div>
+                            <div class="tech-bubble python">Python</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Developer Network -->
+            <article class="dashboard-card network-intelligence">
+                <header class="card-header">
+                    <h3 class="card-title">Developer Network</h3>
+                    <div class="network-stats">
+                        <span id="connections-count">1,247</span> connections
+                    </div>
+                </header>
+                <div class="card-content">
+                    <div class="collaboration-suggestions">
+                        <h4 class="suggestions-title">Suggested Collaborators</h4>
+                        <div id="collaborator-list" class="collaborator-grid">
+                            <!-- Dynamic collaborator data will load here -->
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- AI Recommendations -->
+            <article class="dashboard-card ai-recommendations">
+                <header class="card-header">
+                    <h3 class="card-title">AI Project Recommendations</h3>
+                    <div class="ai-confidence">
+                        <span class="confidence-score" id="ai-confidence">95%</span>
+                        <span class="confidence-label">Confidence</span>
+                    </div>
+                </header>
+                <div class="card-content">
+                    <div class="recommendation-categories">
+                        <div class="category active" data-category="career">Career Growth</div>
+                        <div class="category" data-category="skill">Skill Development</div>
+                        <div class="category" data-category="impact">High Impact</div>
+                    </div>
+                    <div id="ai-recommendations-list" class="recommendations-list">
+                        <!-- AI-generated recommendations will load here -->
+                    </div>
+                </div>
+            </article>
+
+            <!-- Language Trends -->
+            <article class="dashboard-card language-trends">
+                <header class="card-header">
+                    <h3 class="card-title">Language Trends</h3>
+                    <div class="trend-period">
+                        <select id="trend-period" class="modern-select">
+                            <option value="month" selected>This Month</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                </header>
+                <div class="card-content">
+                    <div class="language-trends-container">
+                        <!-- Language trends will load here -->
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>DevFlow</h4>
+                <p>Empowering developers through AI-driven open source insights</p>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#docs">Documentation</a></li>
+                    <li><a href="#api">API Reference</a></li>
+                    <li><a href="#community">Community</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://github.com" target="_blank">GitHub</a></li>
+                    <li><a href="https://twitter.com" target="_blank">Twitter</a></li>
+                    <li><a href="https://discord.com" target="_blank">Discord</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 DevFlow. Open source project under MIT License.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+    <script src="./assets/js/real-data.js"></script>
+    <script src="./assets/js/database.js"></script>
+    <script src="./assets/js/auth.js"></script>
+    <script src="./assets/js/app.js"></script>
+</body>
+</html>

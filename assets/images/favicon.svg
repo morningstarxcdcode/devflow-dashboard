@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00DDFF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#64FFDA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5FBF;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="15" fill="url(#grad1)" opacity="0.1"/>
+
+  <!-- Main logo paths -->
+  <path d="M16 4L4 10l12 6 12-6-12-6z" stroke="url(#grad1)" stroke-width="2" fill="none" filter="url(#glow)"/>
+  <path d="M4 22l12 6 12-6" stroke="url(#grad1)" stroke-width="2" fill="none" filter="url(#glow)"/>
+  <path d="M4 16l12 6 12-6" stroke="url(#grad1)" stroke-width="2" fill="none" filter="url(#glow)"/>
+
+  <!-- Accent dots -->
+  <circle cx="8" cy="13" r="1" fill="#64FFDA" opacity="0.8"/>
+  <circle cx="24" cy="13" r="1" fill="#64FFDA" opacity="0.8"/>
+  <circle cx="16" cy="25" r="1" fill="#00DDFF" opacity="0.9"/>
+</svg>

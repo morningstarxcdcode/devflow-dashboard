@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://morningstarxcdcode.github.io/devflow-dashboard/sitemap.xml
+
+# Crawl-delay for GitHub Pages
+Crawl-delay: 1
+
+# Disallow sensitive files
+Disallow: /.github/
+Disallow: /node_modules/
+Disallow: *.json
+Disallow: /docs/API.md

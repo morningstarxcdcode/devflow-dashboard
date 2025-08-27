@@ -380,4 +380,4 @@ devFlowDB.init().then(() => {
   console.error('❌ Database initialization failed:', error);
 });
 
-export default DevFlowDatabase;
+// Removed ES module export to allow classic script loading without syntax errors.

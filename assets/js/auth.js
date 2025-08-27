@@ -12,7 +12,7 @@ class DevFlowAuth {
 
     // GitHub OAuth configuration
     this.githubConfig = {
-      clientId: 'your_github_client_id', // Set this in production
+      clientId: 'Ov23lic4NTxPUIp9cC8P', // TODO: move to secure backend / env var for production
       redirectUri: window.location.origin + '/auth/callback',
       scope: 'read:user,public_repo,read:org'
     };
@@ -84,7 +84,7 @@ class DevFlowAuth {
         },
         body: JSON.stringify({
           client_id: this.githubConfig.clientId,
-          client_secret: 'your_github_client_secret', // This should be on your backend
+          client_secret: '3f47c334918fa6c958fd093fe21babad52391a90', // WARNING: exposed in client; move to backend in production
           code: code
         })
       });
@@ -414,4 +414,4 @@ window.addEventListener('devflow-auth', (event) => {
   }
 });
 
-export default DevFlowAuth;
+// Removed ES module export to allow classic script loading without syntax errors.

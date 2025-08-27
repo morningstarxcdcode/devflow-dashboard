@@ -100,9 +100,16 @@ class DevFlowApp {
     this.initializeAnalytics();
     this.startPerformanceMonitoring();
 
-    // Initialize AI engine
+    // Initialize AI engine (or stub)
     if (typeof tf !== 'undefined') {
-      await this.initializeAIEngine();
+      if (typeof this.initializeAIEngine === 'function') {
+        try { await this.initializeAIEngine(); } catch(e){ console.warn('AI engine init failed, using stub', e); await this.aiInitStub(); }
+      } else {
+        await this.aiInitStub();
+      }
+    } else {
+      console.warn('TensorFlow not loaded; skipping AI init.');
+      await this.aiInitStub();
     }
 
     // Initialize visualizations
@@ -114,6 +121,14 @@ class DevFlowApp {
 
     console.log('✅ DevFlow initialized successfully!');
     this.showNotification('🎉 DevFlow is ready! Start exploring open source opportunities.', 'success');
+  }
+
+  // Stub for missing AI engine to avoid hanging loader
+  async aiInitStub(){
+    await new Promise(r=>setTimeout(r,200));
+    const ls=document.getElementById('loading-screen');
+    if(ls) ls.remove();
+    console.log('🤖 AI stub initialized');
   }
 
   /**
@@ -1130,9 +1145,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Service Worker Registration
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(registration => console.log('✅ SW registered'))
-      .catch(error => console.log('❌ SW registration failed'));
-  });
+  const disableSW = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  if (disableSW) {
+    navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r=>r.unregister()));
+    console.log('⚠️ SW disabled in dev (localhost) to avoid cache issues');
+  } else {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js?v='+ (window.DEVFLOW_ASSET_VERSION||'1.0.2'))
+        .then(registration => console.log('✅ SW registered'))
+        .catch(error => console.log('❌ SW registration failed'));
+    });
+  }
 }

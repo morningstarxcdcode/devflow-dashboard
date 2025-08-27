@@ -1027,3 +1027,41 @@ body::before {
   color: var(--metallic-silver);
   font-size: 0.9rem;
 }
+
+/* Safari Compatibility Fixes */
+@supports (-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px)) {
+  .glassmorphism,
+  .header,
+  .hero-stats,
+  .dashboard-card,
+  .modern-select,
+  .footer {
+    -webkit-backdrop-filter: blur(var(--blur-strength, 25px));
+    backdrop-filter: blur(var(--blur-strength, 25px));
+  }
+}
+
+/* Safari-specific webkit prefixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .gradient-text,
+  .logo-text {
+    background: linear-gradient(135deg, var(--electric-blue) 0%, var(--neon-mint) 25%, var(--iridescent-purple) 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Safari transform3d hardware acceleration */
+  .dashboard-card,
+  .glassmorphism,
+  .hero-stats {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Safari animation improvements */
+  .loading-spinner {
+    -webkit-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+  }
+}

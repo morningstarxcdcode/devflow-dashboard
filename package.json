@@ -12,8 +12,8 @@
     "url": "https://github.com/morningstarxcdcode/devflow-dashboard/issues"
   },
   "scripts": {
-    "dev": "live-server --port=3000 --open",
-    "start": "live-server --port=8080",
+  "dev": "live-server . --port=3000 --open=./index.html",
+  "start": "live-server . --port=8080 --open=./index.html",
     "build": "npm run minify && npm run optimize",
     "deploy": "gh-pages -d .",
     "minify": "html-minifier --collapse-whitespace --remove-comments --minify-css --minify-js index.html -o index.min.html",

@@ -3,13 +3,13 @@
  * Provides offline functionality and caching
  */
 
-const CACHE_NAME = 'devflow-v1.0.0';
-const STATIC_CACHE = 'devflow-static-v1';
-const DYNAMIC_CACHE = 'devflow-dynamic-v1';
-const API_CACHE = 'devflow-api-v1';
+// Bumped cache versions to invalidate old cached scripts that contained ES module exports
+const CACHE_NAME = 'devflow-v1.0.2';
+const STATIC_CACHE = 'devflow-static-v3';
+const DYNAMIC_CACHE = 'devflow-dynamic-v3';
+const API_CACHE = 'devflow-api-v3';
 
 const STATIC_FILES = [
-  '/',
   '/index.html',
   '/manifest.json',
   '/assets/css/main.css',
@@ -17,6 +17,10 @@ const STATIC_FILES = [
   '/assets/js/database.js', 
   '/assets/js/auth.js',
   '/assets/js/app.js',
+  '/assets/js/config.js',
+  '/assets/js/github-api.js',
+  '/assets/js/ai-engine.js',
+  '/assets/js/visualizations.js',
   '/assets/images/favicon.svg',
   'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js',
   'https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js'
@@ -71,12 +75,28 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
+  // Debug log minimal (can be removed later)
+  if (url.origin === self.location.origin && url.pathname.match(/^\/assets\/js\/(config|github-api|ai-engine|visualizations|app)\.js$/)) {
+    // console.log('[SW] fetch', url.pathname); // keep commented to avoid noise
+  }
 
   // Skip non-GET requests
   if (request.method !== 'GET') return;
 
   // Handle different types of requests
   if (url.origin === self.location.origin) {
+    // Always network-first for manifest & index to avoid 503 stale cache scenarios
+    if (url.pathname === '/manifest.json' || url.pathname === '/index.html') {
+      event.respondWith(networkFirstStrategy(request));
+      return;
+    }
+    // SPA style fallback: if requesting root '/' return index.html
+    if (url.pathname === '/') {
+      event.respondWith(
+        caches.match('/index.html').then(cached => cached || fetch('/index.html').catch(()=>createOfflineResponse(request)))
+      );
+      return;
+    }
     // Same origin requests - use cache first strategy
     event.respondWith(cacheFirstStrategy(request));
   } else if (url.hostname === 'api.github.com') {
@@ -380,6 +400,20 @@ function createOfflineHTML() {
     </html>
   `;
 }
+
+// Allow clients to trigger immediate activation after update
+self.addEventListener('message', event => {
+  try {
+    if (!event || !event.data) return;
+    if (event.data === 'SKIP_WAITING') {
+      console.log('⏭️ Skip waiting requested by client');
+      self.skipWaiting();
+    }
+  } catch (err) {
+    // Intentionally log and continue – avoids unhandled rejection while keeping SW resilient
+    console.warn('SW message handler error', err);
+  }
+});
 
 // Handle background sync
 self.addEventListener('sync', event => {

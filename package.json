@@ -39,7 +39,7 @@
     "eslint": "^8.50.0",
     "prettier": "^3.0.3",
     "html-validate": "^8.5.0",
-    "lighthouse": "^11.1.0"
+    "lighthouse": "^12.8.1"
   },
   "keywords": [
     "github",
